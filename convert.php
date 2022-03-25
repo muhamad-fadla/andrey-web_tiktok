@@ -15,8 +15,6 @@ function http($url,$headers =[], $geturl = false)
         CURLOPT_USERAGENT => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
         CURLOPT_ENCODING       => "utf-8",
         CURLOPT_AUTOREFERER    => false,
-        CURLOPT_COOKIEJAR      => 'cookie.txt',
-        CURLOPT_COOKIEFILE     => 'cookie.txt',
         CURLOPT_REFERER        => 'https://www.tiktok.com/',
         CURLOPT_CONNECTTIMEOUT => 30,
         CURLOPT_SSL_VERIFYHOST => false,
@@ -25,11 +23,9 @@ function http($url,$headers =[], $geturl = false)
         CURLOPT_MAXREDIRS      => 10,
     );
     curl_setopt_array( $ch, $options );
-    if (defined('CURLOPT_IPRESOLVE') && defined('CURL_IPRESOLVE_V4')) {
-      curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-    }
+
     $data = curl_exec($ch);
-    $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    // $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     if ($geturl === true)
     {
         return curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
@@ -110,8 +106,22 @@ $videoTiktok = htmlspecialchars($_GET['url']);
 
 header('Content-Type: application/json; charset=utf-8');
 
-$mapping = array_map(function($val){
-  return [$val];
-}, convert($videoTiktok));
+$container = [];
+$data =  json_decode(convert($videoTiktok));
 
-echo json_encode($mapping);
+if($data->status_code == 0){
+  $container['status'] = true;
+  $container['without_watermark'] = $data->aweme_details[0]->video->play_addr->url_list[0];
+  $container['original_video'] = $data->aweme_details[0]->video->download_addr->url_list[0];
+  $container['music_only'] = $data->aweme_details[0]->video->play_url->url_list[0];
+
+  $container['thumb'] = $data->aweme_details[0]->video->origin_cover->url_list[0];
+  $container['desc'] = $data->aweme_details[0]->desc;
+  $container['author'] = $data->aweme_details[0]->author->nickname;
+}else{
+  $container['status'] = false;
+  $container['message'] = $data->status_msg;
+}
+
+
+echo json_encode($container);
