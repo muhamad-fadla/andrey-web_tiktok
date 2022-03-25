@@ -1,0 +1,14 @@
+<?php
+function random($length = 10) {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $randomString;
+}
+$url = $_GET['url'];
+header("Content-Type:video/mp4");
+header('Content-Disposition:attachment; filename="'.random().'.mp4"');
+readfile("$url") ;
