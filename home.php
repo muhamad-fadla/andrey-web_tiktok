@@ -13,5 +13,8 @@ $site_title = str_replace( [ '%site_name%', '%domain%' ], [ get_option( 'site_na
 $meta_description = str_replace( [ '%site_name%', '%domain%' ], [ get_option( 'site_name' ), $_SERVER['HTTP_HOST'] ], get_option( 'home_description' ) );
 $meta_robots = get_option( 'home_robots' );
 
-require 'home-index.php';
+// require 'home-index.php';
+require 'themes/default/header.php';
+require 'themes/default/home.php';
+require 'themes/default/footer.php';
 ?>

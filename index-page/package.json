@@ -11,8 +11,11 @@
     "alpinejs": "^3.9.2",
     "axios": "^0.26.1",
     "basename": "^0.1.2",
+    "prop-types": "^15.8.1",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-adsense": "^0.1.0",
+    "react-dom": "^17.0.2",
+    "url": "^0.11.0"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^1.0.7",

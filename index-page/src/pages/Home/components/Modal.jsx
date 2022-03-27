@@ -1,11 +1,30 @@
 import React, { useState, Fragment, useRef } from 'react';
 import './Modal.css';
+import AdSense from 'react-adsense';
 
 const ModalDownload = ({show,setShow, data}) => {
+	const [hasDownload, setHasDownload] = useState(false)
 
 	const toRef = (url) => {
-		window.location.href = url;
+		setHasDownload(true);
+		setShow(false);
+
+		window.open(url,'_blank');
 	}
+
+	const AlertStyles = {
+		backgroundColor: '#e6fffa',
+		borderColor: '#38b2ac',
+		border: '1px solid #38b2ac',
+		borderBottomRightRadius: '0.25rem',
+    	borderBottomLeftRadius: '0.25rem',
+    	color: '#234e52',
+    	boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+    	paddingRight: '0.75rem',
+    	paddingLeft: '0.75rem',
+    	padding: '1rem'
+	}
+
 
   return (
   	<>
@@ -22,11 +41,8 @@ const ModalDownload = ({show,setShow, data}) => {
 					          <div className="ml-3">
 					            <span className="text-sm font-semibold antialiased block leading-tight">@{data.author}</span>				            
 					          </div>
-			        			<span className="">X</span>
-
-
 					        </div>
-					        <img src={data.thumb} />
+					        <img style={{height: '250px', margin: 'auto'}} src={data.thumb} />
 					        <div className="flex items-center mx-4 my-3 text-gray-600">
 					          <div className="flex flex-row justify-between">
 					            <svg fill="#262626" height={20} viewBox="0 0 48 48" width={24}>
@@ -41,7 +57,7 @@ const ModalDownload = ({show,setShow, data}) => {
 						          <button className="bg-blue-600 py-2 mt-1 rounded-md ring-1 ring-blue-500 border-b-4 border-blue-800 hover:bg-blue-700" onClick={() => toRef('/dl.php?url=' + data.without_watermark)}>Video Without Watermark</button>
 					        	</div>
 					          	<div className="grid grid-cols-1 grid-cols-1 gap-4 mt-2">
-					          	<button className="bg-blue-600 py-2 mt-1 rounded-md ring-1 ring-blue-500 border-b-4 border-blue-800 hover:bg-blue-700 col-span-2 lg:col-span-2" onClick={() => toRef('/mp3.php?url'+data.music_only)}>Download Audio</button>
+					          	<button className="bg-blue-600 py-2 mt-1 rounded-md ring-1 ring-blue-500 border-b-4 border-blue-800 hover:bg-blue-700 col-span-2 lg:col-span-2" onClick={() => toRef('/mp3.php?url='+data.music_only)}>Download Audio</button>
 					          	</div>
 					        </div>
 					      </div>
@@ -54,7 +70,26 @@ const ModalDownload = ({show,setShow, data}) => {
 			  </div>
 			</div>
 
-  			)}
+		)}
+
+		{hasDownload && (
+			<div className="modal fixed mt-2 top-0 left-0 w-full h-full fade justify-center items-center flex overflow-x-hidden overflow-y-auto" tabIndex={-1} role="dialog">
+			  <div className="modal-dialog relative w-auto pointer-events-none max-w-lg my-8 mx-auto px-4 sm:px-0" role="document">
+			    <div className="relative flex flex-col w-full pointer-events-auto bg-white border border-gray-300 rounded-lg">
+			      <div className="flex items-start justify-between p-4 border-b border-gray-300 rounded-t">
+			        <h5 className="mb-0 text-lg leading-normal">Thanks for Download</h5>
+			        <button type="button" className="close" onClick={() => setHasDownload(false)}>×</button>
+			      </div>
+			      <div className="relative flex p-4">
+			       	<div style={AlertStyles} className="px-4 py-3 shadow-md" role="alert">
+				      <p>Video anda telah di unduh!</p>
+					</div>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+
+		)}
 	</>
 
 	);

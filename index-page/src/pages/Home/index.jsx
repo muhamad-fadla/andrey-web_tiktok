@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FAQ from './../../components/FAQ'
 import useTiktok from './hooks/useTiktok';
 import ModalDownload from './components/Modal'
+import UrlParse from 'url';
 
 const Home = function() {
   const [ url, setURL ] = useState('');
@@ -13,10 +14,25 @@ const Home = function() {
     data: {}
   })
 
+  useEffect(async() => {
+
+    let {query} = UrlParse.parse(window.location.href, true);
+
+    if(query?.url){
+      
+      setURL(query.url)
+      await handleSubmitSearch(null, false);
+    }
+
+  },[setURL, url])
+
+
   const validateURL  = url => /^((https|http)?:\/\/(?:www\.)?([^/?#&]+)).*/gmi.test(url);
 
-  const handleSubmitSearch = async(e) => {
-    e.preventDefault();
+  const handleSubmitSearch = async(e, prevent = true) => {
+    if(prevent){
+      e.preventDefault();
+    }
 
     if(!validateURL(url)){
       if(url == ''){
