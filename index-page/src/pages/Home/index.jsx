@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
 import FAQ from './../../components/FAQ'
 import useTiktok from './hooks/useTiktok';
+import ModalDownload from './components/Modal'
 
 const Home = function() {
   const [ url, setURL ] = useState('');
   const [invalidURL, setInvalidURL] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [isDownloadedable, setDownloadable] = useState({
+    is: false,
+    data: {}
+  })
 
-  const validateURL  = url => /http:|https:/gmi.test(url);
+  const validateURL  = url => /^((https|http)?:\/\/(?:www\.)?([^/?#&]+)).*/gmi.test(url);
 
   const handleSubmitSearch = async(e) => {
     e.preventDefault();
@@ -25,9 +31,25 @@ const Home = function() {
 
     setIsLoading(true)
 
-    let tiktokResult = await useTiktok(url);
+    let tiktokResult = await useTiktok(url).catch(er => {
+      console.error(er);
+      setInvalidURL(true);
+    });
+
+    if(!tiktokResult.status){
+      setIsLoading(false);
+      setIsError(true);
+      return;
+    }
+
+    setIsLoading(false);
 
     console.log(tiktokResult)
+
+    setDownloadable({
+      is: true,
+      data: tiktokResult
+    })
   }
 
   const handleChangeInput = (e) => {
@@ -55,6 +77,21 @@ const Home = function() {
             <button className="w-full appearance-none text-white font-semibold rounded-lg md:rounded-r-lg text-xl md:w-3/12 px-4 py-4 bg-gradient-to-tl from-blue-400 to-blue-600 hover:blue-500 hover:text-white focus:outline-none" type="submit" id="submit">Download
             </button>
           </form>
+            {isError && (
+              <div className=" emsg bg-red-600 text-white max-w-2xl mx-auto mt-2 rounded-md shadow-xl flex flex-row overflow-hidden" data-nosnippet>
+              <div className="w-16 py-6  bg-red-900">
+                <svg className="max-h-10 animate-bounce" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div className="w-full flex flex-col justify-center pl-6">
+                <p className="font-bold text-lg">Can't get results!</p>
+                <p>Try again in 10 seconds.</p>
+                <p>Please check if this URL is correct and is not private.</p>
+                <p>If it is not accessible after 3 tries, that mean that Instagram restricted access for that post.</p>
+              </div>
+            </div>
+            )}
 
           {isLoading && (
             <div id="preload" className="justify-center flex mt-3 py-4" >
@@ -137,6 +174,8 @@ const Home = function() {
         <FAQ />
         
       </main>
+
+      <ModalDownload show={isDownloadedable.is} setShow={setDownloadable} data={isDownloadedable.data} />
     </div>
   );
 }
