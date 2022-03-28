@@ -3,6 +3,8 @@ import FAQ from './../../components/FAQ'
 import useTiktok from './hooks/useTiktok';
 import ModalDownload from './components/Modal'
 import UrlParse from 'url';
+import AdSense from 'react-adsense';
+import Delayed from './components/Delayed'
 
 const Home = function() {
   const [ url, setURL ] = useState('');
@@ -85,6 +87,8 @@ const Home = function() {
 
   return (
     <div>
+
+
       <section className="w-full mx-auto" style={{background: ENV['thema.color']}}>
         <div className="max-w-7xl mx-auto justify-center px-4 lg:py-16">
           <h1 className="mx-auto text-center  py-10 md:pb-10 text-3xl md:text-4xl lg:text-5xl text-blue-50 font-semibold md:font-extrabold">TikTok Downloader</h1>
@@ -134,12 +138,20 @@ const Home = function() {
             </div>
             )}
 
-          <div className="justify-center mt-3 py-0 text-white md:max-w-2xl mx-auto text-sm">
-            {/* ads */}
-          </div>
           <div className="text-center text-white py-10">Download Video TikTok without Watermark</div>
         </div>
       </section>
+          <div className="justify-center mt-3 py-0 text-white md:max-w-2xl mx-auto text-sm">
+            <Delayed wait={500}>
+              <AdSense.Google
+                  client={ENV['ads.landing.ca-pub']}
+                  slot={ENV['ads.landing.slot']}
+                  style={{ display: 'block' }}
+                  format='auto'
+                  responsive='true'
+                />
+            </Delayed>
+          </div>
       <main className="w-full bg-gray-50">
         <section className="py-8 max-w-7xl mx-auto px-4">
           <div className="w-full md:flex bg-white rounded-xl overflow-hidden shadow-lg">
@@ -189,7 +201,17 @@ const Home = function() {
 
         <FAQ />
         
+        <Delayed wait={500} >
+          <AdSense.Google
+                  client={ENV['ads.landing.ca-pub']}
+                  slot={ENV['ads.landing.slot']}
+                  style={{ display: 'block' }}
+                  format='auto'
+                  responsive='true'
+                />
+        </Delayed>
       </main>
+
 
       <ModalDownload show={isDownloadedable.is} setShow={setDownloadable} data={isDownloadedable.data} />
     </div>

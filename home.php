@@ -1,20 +1,29 @@
-<?php
-require 'libraries/ua.class.php';
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/src/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tiktoku</title>
 
-require 'core/functions/options.php';
-require 'core/functions/cache.php';
-require 'core/functions/permalinks.php';
-require 'core/functions/common.php';
-require 'core/functions/site.php';
+    <meta name="config" key="site_name" value="Tiktoku" >
+    <meta name="config" key="thema.color" value="#2196f3" >
+    <meta name="config" key="base.api" value="">
 
-require 'core/classes/agc.php';
-
-$site_title = str_replace( [ '%site_name%', '%domain%' ], [ get_option( 'site_name' ), $_SERVER['HTTP_HOST'] ], get_option( 'home_title' ) );
-$meta_description = str_replace( [ '%site_name%', '%domain%' ], [ get_option( 'site_name' ), $_SERVER['HTTP_HOST'] ], get_option( 'home_description' ) );
-$meta_robots = get_option( 'home_robots' );
-
-// require 'home-index.php';
-require 'themes/default/header.php';
-require 'themes/default/home.php';
-require 'themes/default/footer.php';
-?>
+    <!-- ADS -->
+    <meta name="config" key="ads.landing.ca-pub" value="ca-pub-7660829943092451">
+    <meta name="config" key="ads.landing.slot" value="8106185144">
+    <meta name="config" key="ads.download.ca-pub" value="ca-pub-7660829943092451">
+    <meta name="config" key="ads.download.slot" value="8106185144">
+    <meta name="config" key="ads.wait-before-show" value="500"> 
+ 
+    
+    <script type="module" crossorigin src="/public/index.25ae370b.js"></script>
+    <link rel="modulepreload" href="/public/vendor.7e29bd08.js">
+    <link rel="stylesheet" href="/public/index.b028d136.css">
+  </head>
+  <body class="antialiased">
+    <div id="root"></div>
+    <script crossorigin="anonymous" async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  </body>
+</html>

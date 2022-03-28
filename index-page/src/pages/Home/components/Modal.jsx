@@ -1,9 +1,28 @@
-import React, { useState, Fragment, useRef } from 'react';
+import React, { useState, Fragment, useRef, useEffect } from 'react';
 import './Modal.css';
 import AdSense from 'react-adsense';
+import Delayed from './Delayed'
 
 const ModalDownload = ({show,setShow, data}) => {
 	const [hasDownload, setHasDownload] = useState(false)
+
+	useEffect(()=> {
+		setTimeout(() => {
+			let matches = document.querySelectorAll("ins.ADSENSE");
+
+			Array.from(matches).forEach((element) => {
+			      let parentElement = element.parentElement;
+			      if (window.getComputedStyle(parentElement).getPropertyValue("display") === "none")  { 
+			          element.remove(); 
+			      } else {
+			      element.classList.remove("ADSENSE");
+			      element.classList.add("adsbygoogle");
+			          (adsbygoogle = window.adsbygoogle || []).push({}); 
+			      }
+			  });
+		}, 1000)
+
+	}, [])
 
 	const toRef = (url) => {
 		setHasDownload(true);
@@ -56,9 +75,11 @@ const ModalDownload = ({show,setShow, data}) => {
 						          <button className="bg-blue-600 py-2 mt-1 rounded-md ring-1 ring-blue-500 border-b-4 border-blue-800 hover:bg-blue-700" onClick={() => toRef('/dl.php?url=' + data.without_watermark)}>Download Video</button>
 						          <button className="bg-blue-600 py-2 mt-1 rounded-md ring-1 ring-blue-500 border-b-4 border-blue-800 hover:bg-blue-700" onClick={() => toRef('/dl.php?url=' + data.without_watermark)}>Video Without Watermark</button>
 					        	</div>
-					          	<div className="grid grid-cols-1 grid-cols-1 gap-4 mt-2">
-					          	<button className="bg-blue-600 py-2 mt-1 rounded-md ring-1 ring-blue-500 border-b-4 border-blue-800 hover:bg-blue-700 col-span-2 lg:col-span-2" onClick={() => toRef('/mp3.php?url='+data.music_only)}>Download Audio</button>
-					          	</div>
+					        	{data.music_only && (
+						          	<div className="grid grid-cols-1 grid-cols-1 gap-4 mt-2">
+						          		<button className="bg-blue-600 py-2 mt-1 rounded-md ring-1 ring-blue-500 border-b-4 border-blue-800 hover:bg-blue-700 col-span-2 lg:col-span-2" onClick={() => toRef('/mp3.php?url='+data.music_only)}>Download Audio</button>
+						          	</div>
+					        		)}
 					        </div>
 					      </div>
 					    </div>
@@ -84,6 +105,15 @@ const ModalDownload = ({show,setShow, data}) => {
 			       	<div style={AlertStyles} className="px-4 py-3 shadow-md" role="alert">
 				      <p>Video anda telah di unduh!</p>
 					</div>
+
+					<Delayed wait={500}>
+						<ins className="adsbygoogle"
+							style={{display: 'block'}}
+							data-ad-client={ENV['ads.download.ca-pub']}
+							data-ad-slot={ENV['ads.download.slot']}
+							data-ad-format="auto"
+							data-full-width-responsive="true"></ins>
+					</Delayed>
 			      </div>
 			    </div>
 			  </div>
